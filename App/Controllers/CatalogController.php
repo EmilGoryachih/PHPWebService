@@ -42,49 +42,50 @@ class CatalogController
         include __DIR__ . '/../../views/admin/cars/create.php';
     }
 
-    private function handleImageUpload(array $file): ?string
+    /**
+     * @param array $file — элемент $_FILES['image_file']
+     * @return string имя сохранённого файла
+     */
+    protected function handleImageUpload(array $file): string
     {
-        // Нет загруженного файла?
-        if (empty($file['tmp_name']) || !\is_uploaded_file($file['tmp_name'])) {
-            return null;
+        $tmpName = $file['tmp_name'];
+        $origName = basename($file['name']);
+        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+        $newName = 'car_' . uniqid() . '.' . $ext;
+        $destPath = __DIR__ . '/../../public/img/' . $newName;
+
+        // Читаем содержимое и создаём GD-изображение любым форматом
+        $data = file_get_contents($tmpName);
+        $img = @imagecreatefromstring($data);
+        if ($img === false) {
+            // Если не удалось распознать — просто скопируем без изменения
+            move_uploaded_file($tmpName, $destPath);
+            return $newName;
         }
 
-        $tmp  = $file['tmp_name'];
-        $info = \getimagesize($tmp);
-        if ($info === false) {
-            return null; // не изображение
+        // Масштабируем (например, ширина 800, высота сохраняется пропорционально)
+        $w = 800;
+        $h = (int)(imagesy($img) * ($w / imagesx($img)));
+        $resized = imagescale($img, $w, $h);
+
+        // Сохраняем в зависимости от формата
+        switch ($ext) {
+            case 'png':
+                imagepng($resized, $destPath);
+                break;
+            case 'gif':
+                imagegif($resized, $destPath);
+                break;
+            default:
+                // JPEG по умолчанию с качеством 85%
+                imagejpeg($resized, $destPath, 85);
         }
 
-        // Определяем расширение
-        $ext  = $info[2] === IMAGETYPE_PNG ? 'png' : 'jpg';
-        $name = uniqid('car_') . '.' . $ext;
-        $dest = __DIR__ . '/../../public/img/' . $name;
+        // Чистим память
+        imagedestroy($img);
+        imagedestroy($resized);
 
-        // Перемещаем загруженный файл
-        \move_uploaded_file($tmp, $dest);
-
-        // Приводим ширину к максимуму 800px, сохраняя пропорции
-        list($w, $h) = $info;
-        $maxW = 800;
-        if ($w > $maxW) {
-            $ratio = $maxW / $w;
-            $newH  = (int)($h * $ratio);
-
-            if ($ext === 'png') {
-                $src = \imagecreatefrompng($dest);
-                $dst = \imagescale($src, $maxW, $newH);
-                \imagepng($dst, $dest);
-            } else {
-                $src = \imagecreatefromjpeg($dest);
-                $dst = \imagescale($src, $maxW, $newH);
-                \imagejpeg($dst, $dest, 85);
-            }
-
-            \imagedestroy($src);
-            \imagedestroy($dst);
-        }
-
-        return $name;
+        return $newName;
     }
 
 
