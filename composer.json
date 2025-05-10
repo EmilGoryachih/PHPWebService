@@ -1,0 +1,13 @@
+{
+    "name": "car-catalog/app",
+    "description": "Автоподбор — бэкенд на PHP",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "CarCatalog\\App\\": "App/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
