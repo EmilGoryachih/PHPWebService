@@ -45,7 +45,6 @@ class Car
         ");
         $stmt->execute(['id' => $id]);
 
-        /*   ↓↓↓  главное - поставить глобальный префикс  */
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

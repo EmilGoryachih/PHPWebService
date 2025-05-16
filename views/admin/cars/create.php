@@ -75,18 +75,14 @@
         const dt      = new DataTransfer();
 
         input.addEventListener('change', () => {
-            // Для каждого нового файла
             for (const file of input.files) {
-                // Пропускаем, если уже добавлен
                 if ([...dt.files].some(f =>
                     f.name === file.name && f.lastModified === file.lastModified)) {
                     continue;
                 }
 
-                // Кладём в DataTransfer
                 dt.items.add(file);
 
-                // Рисуем превью
                 const reader = new FileReader();
                 reader.onload = e => {
                     preview.insertAdjacentHTML(
@@ -105,12 +101,9 @@
                 reader.readAsDataURL(file);
             }
 
-            // Возвращаем накопленный список в <input>
             input.files = dt.files;
-            // НЕ очищаем input.value — иначе файлы пропадут
         });
 
-        // Удаление файла по кнопке ×
         preview.addEventListener('click', e => {
             if (!e.target.matches('button[data-name]')) return;
 
@@ -128,7 +121,6 @@
 
 
     (function() {
-        // поле главного фото
         const mainInput   = document.getElementById('mainImageInput');
         const mainPreview = document.getElementById('mainImagePreview');
 
@@ -136,7 +128,6 @@
             const file = mainInput.files[0];
             if (!file) return;
 
-            // очищаем прошлый превью
             mainPreview.innerHTML = '';
 
             const reader = new FileReader();

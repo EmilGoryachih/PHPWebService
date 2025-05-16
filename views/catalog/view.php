@@ -3,7 +3,6 @@
 <div class="container py-5">
     <?php if ($car): ?>
         <div class="row mb-4">
-            <!-- Блок фотографий автомобиля -->
             <div class="col-md-6 mb-4">
                 <?php if (!empty($car['image'])): ?>
                     <img src="/img/<?= htmlspecialchars($car['image']) ?>" class="img-fluid rounded mb-3" alt="<?= htmlspecialchars($car['make'].' '.$car['model']) ?>">
@@ -19,7 +18,6 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Блок информации о автомобиле -->
             <div class="col-md-6">
                 <h2 class="mb-4"><?= htmlspecialchars($car['make'].' '.$car['model']) ?></h2>
                 <ul class="list-group list-group-flush mb-4">

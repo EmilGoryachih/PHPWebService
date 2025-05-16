@@ -11,7 +11,6 @@ class Connection
     public static function make(): PDO
     {
         if (self::$pdo === null) {
-            // вот здесь — единый require конфига
             $config = require __DIR__ . '/../Config/config.php';
             $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset=utf8";
             try {
