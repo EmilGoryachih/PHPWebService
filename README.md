@@ -31,8 +31,7 @@ docker compose exec app composer install
 ### 5. Миграции: создание таблиц
 
 ```bash
-docker compose exec db \
-  mysql -uuser -puserpass carsdb -e "
+docker compose exec db mysql -uuser -puserpass carsdb -e "
     CREATE TABLE IF NOT EXISTS cars (
       id INT AUTO_INCREMENT PRIMARY KEY,
       make VARCHAR(50) NOT NULL,
