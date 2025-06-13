@@ -157,7 +157,7 @@
                 <input type="text" name="name" class="form-control" placeholder="Ваше имя" required>
             </div>
             <div class="col-md-4">
-                <input type="tel" name="phone" class="form-control" placeholder="Телефон" required>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+7(123)-456-7890" required>
             </div>
             <div class="col-md-2">
                 <button class="btn btn-light w-100">Отправить</button>
@@ -174,5 +174,21 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var phoneInput = document.querySelector('input[name="phone"]');
+        Inputmask({
+            mask: "+7(999)-999-9999",
+            showMaskOnHover: false,
+            showMaskOnFocus: true,
+            clearIncomplete: true,
+        }).mask(phoneInput);
+    });
+</script>
+
+
 </body>
 </html>
